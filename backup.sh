@@ -171,7 +171,7 @@ if ! find /opt/hiddify-manager/hiddify-panel/ -type d -iname "backup" -print -qu
   exit 1
 fi
 
-if [ -d "/opt/hiddify-manager/hiddify-panel/backup.sh" ]; then
+if [ -f "/opt/hiddify-manager/hiddify-panel/backup.sh" ]; then
   backupCommand="bash backup.sh"
 else
 backupCommand="python3 -m hiddifypanel backup"
