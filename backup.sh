@@ -127,6 +127,8 @@ EOL
 chmod +x "$path/ac-backup.sh"
 
 ZIP=$(cat <<EOF
+#!/bin/bash
+
 docker exec marzban-mysql-1 bash -c "/var/lib/mysql/ac-backup.sh"
 zip -r /root/ac-backup-m.zip /opt/marzban/* /var/lib/marzban/* /opt/marzban/.env -x "$path/\*"
 zip -r /root/ac-backup-m.zip "$path/db-backup/*"
@@ -169,12 +171,23 @@ if ! find /opt/hiddify-manager/hiddify-panel/ -type d -iname "backup" -print -qu
   exit 1
 fi
 
+if [ -d "/opt/hiddify-manager/hiddify-panel/backup.sh" ]; then
+  backupCommand="bash backup.sh"
+else
+backupCommand="python3 -m hiddifypanel backup"
+fi
+
+
 ZIP=$(cat <<EOF
+#!/bin/bash
+
 cd /opt/hiddify-manager/hiddify-panel/
 if [ $(find /opt/hiddify-manager/hiddify-panel/backup -type f | wc -l) -gt 100 ]; then
   find /opt/hiddify-manager/hiddify-panel/backup -type f -delete
 fi
-python3 -m hiddifypanel backup
+
+$backupCommand
+
 cd /opt/hiddify-manager/hiddify-panel/backup
 latest_file=\$(ls -t *.json | head -n1)
 rm -f /root/ac-backup-h.zip
