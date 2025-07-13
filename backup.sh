@@ -145,8 +145,12 @@ ACLover="marzban backup"
 elif [[ "$xmhs" == "x" || "$xmhs" == "s" ]]; then
 
 ACLover=""
+dbDir=$(find /etc /opt/freedom /usr/local \
+           -type d \( -iname "x-ui*" -o -iname "s-ui" \) \
+           -print -quit 2>/dev/null)
 
-if dbDir=$(find /etc /opt/freedom /usr/local -type d \( -iname "x-ui*" -o -iname "s-ui" \) -print -quit 2>/dev/null); then
+
+if [[ -n "${dbDir}" ]]; then
   echo "The folder exists at $dbDir"
   if [[ $dbDir == "/opt/freedom/x-ui"* ]]; then
     dbDir="${dbDir}/db/x-ui.db"
@@ -163,11 +167,12 @@ else
   exit 1
 fi
 
-if configDir=$(find /usr/local -type d -iname "x-ui*" -print -quit 2>/dev/null); then
+configDir=$(find /usr/local -type d -iname "x-ui*" -print -quit 2>/dev/null)
+if [[ -n "${configDir}" ]]; then
   echo "The folder exists at $configDir"
-   configDir="${configDir}/config.json"
+  configDir="${configDir}/config.json"
 else
- configDir=""
+  configDir=""
 fi
 
 ZIP="zip /root/ac-backup-${xmhs}.zip ${dbDir} ${configDir}"
