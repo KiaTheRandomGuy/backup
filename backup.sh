@@ -32,7 +32,7 @@ while true; do
     echo "Cronjob (minutes and hours) (e.g : 30 6 or 0 12) : "
     read -r minute hour
     if [[ $minute == 0 ]] && [[ $hour == 0 ]]; then
-        cron_time="* * * * *"
+        cron_time="0 0 * * *"
         break
     elif [[ $minute == 0 ]] && [[ $hour =~ ^[0-9]+$ ]] && [[ $hour -lt 24 ]]; then
         cron_time="0 */${hour} * * *"
@@ -50,15 +50,15 @@ done
 
 
 
-while [[ -z "$xmh" ]]; do
-    echo "x-ui or marzban or hiddify? [x/m/h] : "
-    read -r xmh
-    if [[ $xmh == $'\0' ]]; then
-        echo "Invalid input. Please choose x, m or h."
-        unset xmh
-    elif [[ ! $xmh =~ ^[xmh]$ ]]; then
-        echo "${xmh} is not a valid option. Please choose x, m or h."
-        unset xmh
+while [[ -z "$xmhs" ]]; do
+    echo "x-ui or s-ui or marzban or hiddify? [x/s/m/h] : "
+    read -r xmhs
+    if [[ $xmhs == $'\0' ]]; then
+        echo "Invalid input. Please choose x,s, m or h."
+        unset xmhs
+    elif [[ ! $xmhs =~ ^[xmhs]$ ]]; then
+        echo "${xmhs} is not a valid option. Please choose x, m or h."
+        unset xmhs
     fi
 done
 
@@ -79,7 +79,7 @@ sudo crontab -l | grep -vE '/root/ac-backup.+\.sh' | crontab -
 fi
 
 
-if [[ "$xmh" == "m" ]]; then
+if [[ "$xmhs" == "m" ]]; then
 
 if dir=$(find /opt /root -type d -iname "marzban" -print -quit); then
   echo "The folder exists at $dir"
@@ -142,29 +142,38 @@ fi
 
 ACLover="marzban backup"
 
-elif [[ "$xmh" == "x" ]]; then
+elif [[ "$xmhs" == "x" || "$xmhs" == "s" ]]; then
 
-if dbDir=$(find /etc /opt/freedom -type d -iname "x-ui*" -print -quit); then
+ACLover=""
+
+if dbDir=$(find /etc /opt/freedom /usr/local -type d \( -iname "x-ui*" -o -iname "s-ui" \) -print -quit 2>/dev/null); then
   echo "The folder exists at $dbDir"
-  if [[ $dbDir == *"/opt/freedom/x-ui"* ]]; then
-     dbDir="${dbDir}/db/"
+  if [[ $dbDir == "/opt/freedom/x-ui"* ]]; then
+    dbDir="${dbDir}/db/x-ui.db"
+    ACLover="x-ui backup"
+  elif [[ $dbDir == "/usr/local/s-ui" ]]; then
+    dbDir="${dbDir}/db/s-ui.db" 
+    ACLover="s-ui backup"
+  else
+    dbDir="${dbDir}/x-ui.db"
+    ACLover="x-ui backup"
   fi
 else
   echo "The folder does not exist."
   exit 1
 fi
 
-if configDir=$(find /usr/local -type d -iname "x-ui*" -print -quit); then
+if configDir=$(find /usr/local -type d -iname "x-ui*" -print -quit 2>/dev/null); then
   echo "The folder exists at $configDir"
+   configDir="${configDir}/config.json"
 else
-  echo "The folder does not exist."
-  exit 1
+ configDir=""
 fi
 
-ZIP="zip /root/ac-backup-x.zip ${dbDir}/x-ui.db ${configDir}/config.json"
-ACLover="x-ui backup"
+ZIP="zip /root/ac-backup-${xmhs}.zip ${dbDir} ${configDir}"
 
-elif [[ "$xmh" == "h" ]]; then
+
+elif [[ "$xmhs" == "h" ]]; then
 
 if ! find /opt/hiddify-manager/hiddify-panel/ -type d -iname "backup" -print -quit; then
   echo "The folder does not exist."
@@ -217,18 +226,18 @@ comment=$(trim "$comment")
 
 sudo apt install zip -y
 
-cat > "/root/ac-backup-${xmh}.sh" <<EOL
-rm -rf /root/ac-backup-${xmh}.zip
+cat > "/root/ac-backup-${xmhs}.sh" <<EOL
+rm -rf /root/ac-backup-${xmhs}.zip
 $ZIP
-echo -e "$comment" | zip -z /root/ac-backup-${xmh}.zip
-curl -F chat_id="${chatid}" -F caption=\$'${caption}' -F parse_mode="HTML" -F document=@"/root/ac-backup-${xmh}.zip" https://api.telegram.org/bot${tk}/sendDocument
+echo -e "$comment" | zip -z /root/ac-backup-${xmhs}.zip
+curl -F chat_id="${chatid}" -F caption=\$'${caption}' -F parse_mode="HTML" -F document=@"/root/ac-backup-${xmhs}.zip" https://api.telegram.org/bot${tk}/sendDocument
 EOL
 
 
 
-{ crontab -l -u root; echo "${cron_time} /bin/bash /root/ac-backup-${xmh}.sh >/dev/null 2>&1"; } | crontab -u root -
+{ crontab -l -u root; echo "${cron_time} /bin/bash /root/ac-backup-${xmhs}.sh >/dev/null 2>&1"; } | crontab -u root -
 
 
-bash "/root/ac-backup-${xmh}.sh"
+bash "/root/ac-backup-${xmhs}.sh"
 
 echo -e "\nDone\n"
