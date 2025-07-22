@@ -94,8 +94,8 @@ path=""
 
 if [ -d "/var/lib/marzban/mysql" ]; then
   path="/var/lib/marzban/mysql"
-elif [ -d "var/lib/mysql/marzban" ]; then
-  path="var/lib/mysql/marzban"
+elif [ -d "/var/lib/mysql/marzban" ]; then
+  path="/var/lib/mysql/marzban"
 else
   echo "Neither path exists."
   exit 1
