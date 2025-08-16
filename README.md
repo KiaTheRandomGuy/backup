@@ -33,7 +33,7 @@
 <p align="left">First, you run this command on your server<br><br></p> 
 
 ```bash
-bash backup.sh
+bash <(curl -Ls https://github.com/KiaTheRandomGuy/backup/raw/main/backup.sh)
 ```
 
 ###
@@ -97,5 +97,6 @@ bash backup.sh
 <h1 align="left">Help us</h1>
 
 ###
+
 
 <p align="left">I used the translator and if I have gramme problem please help me to improve it<br>Also, I have tested this script only on Ubuntu and developers can help us to develop this script for other operating systems.</p>
