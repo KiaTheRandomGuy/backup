@@ -33,8 +33,8 @@
 <p align="left">First, you run this command on your server<br><br></p> 
 
 ```bash
-bash <(curl -Ls https://github.com/AC-Lover/backup/raw/main/backup.sh)
-``` 
+bash backup.sh
+```
 
 ###
 
@@ -99,23 +99,3 @@ bash <(curl -Ls https://github.com/AC-Lover/backup/raw/main/backup.sh)
 ###
 
 <p align="left">I used the translator and if I have gramme problem please help me to improve it<br>Also, I have tested this script only on Ubuntu and developers can help us to develop this script for other operating systems.</p>
-
-###
-
-<h1 align="left">Donation</h1>
-
-###
-
-<p align="left">https://nowpayments.io/donation/ACLover</p>
-
-###
-
-<h1 align="left">Video tutorial</h1>
-
-https://github.com/AC-Lover/backup/assets/49290111/905c545c-caa9-4ad5-80d1-82c702fb3f2e
-
-
-## Stargazers over time
-
-[![Stargazers over time](https://starchart.cc/AC-Lover/backup.svg)](https://starchart.cc/AC-Lover/backup)
-

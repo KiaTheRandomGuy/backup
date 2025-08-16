@@ -33,8 +33,8 @@
 <p align="right">ابتدا این دستور را روی سرور خود اجرا می کنید</p>
   
 ```bash
-bash <(curl -Ls https://github.com/AC-Lover/backup/raw/main/backup.sh)
-``` 
+bash backup.sh
+```
 
 ###
 
@@ -100,20 +100,3 @@ bash <(curl -Ls https://github.com/AC-Lover/backup/raw/main/backup.sh)
 
 <p align="right">من این اسکریپت را فقط بر روی اوبونتو تست کرده ام و توسعه دهندگان می توانند در توسعه این اسکریپت برای سایر سیستم عامل ها به ما کمک کنند</p>
 
-###
-
-<h1 align="right">حمایت از ما</h1>
-
-###
-
-<p align="right">https://nowpayments.io/donation/ACLover</p>
-
-###
-
-<h1 align="right">ویدئو آموزشی</h1>
-
-https://github.com/AC-Lover/backup/assets/49290111/905c545c-caa9-4ad5-80d1-82c702fb3f2e
-
-## Stargazers over time
-
-[![Stargazers over time](https://starchart.cc/AC-Lover/backup.svg)](https://starchart.cc/AC-Lover/backup)
